@@ -36,6 +36,19 @@ run_with_timeout amass enum --passive -d $domain -o $domain/amass.txt
 echo -e "${red}[+]Enumerate CERT.SH..."
 run_with_timeout curl -s "https://crt.sh/?q=%25.$domain&output=json" | jq -r '.[].name_value' | sed 's/\*\.//g' | anew $domain/cert.txt
 
+
+
+
+-e [+]Enumerating CIDR...                                                                                                                                                                                                                   
+flag provided but not defined: -input-file                                                                                                                                                                                                  
+-e [+]Enumerating NAABU...                                                                                                                                                                                                                  
+[FTL] Could not run enumeration: open bangbros.com/mapcidr.txt: no such file or directory                                                                                                                                                   
+Usage: httpx [OPTIONS] URL
+
+Error: No such option: -s
+
+
+
 # Combining results
 echo "domains saved at $domain/domains.txt..."
 cat $domain/assetfinder.txt $domain/subfinder.txt $domain/amass.txt $domain/cert.txt 2>/dev/null | anew $domain/domains.txt
