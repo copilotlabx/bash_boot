@@ -1,4 +1,3 @@
-
 # Colors
 white="\e[97m"
 red="\e[31m"
@@ -9,9 +8,9 @@ purple="\e[35m"
 
 # Function to run commands with a timeout
 run_with_timeout() {
-    timeout 120s "$@"
+    timeout 300s "$@"
     if [ $? -eq 124 ]; then
-        echo -e "${red}Command '$@' timed out after 120 seconds"
+        echo -e "${red}Command '$@' timed out after 300 seconds"
     fi
 }
 
@@ -39,7 +38,7 @@ run_with_timeout curl -s "https://crt.sh/?q=%25.$domain&output=json" | jq -r '.[
 
 # Combining results
 echo "domains saved at $domain/domains.txt..."
-cat $domain/assetfinder.txt $domain/subfinder.txt $domain/amass.txt $domain/cert.txt | anew $domain/domains.txt
+cat $domain/assetfinder.txt $domain/subfinder.txt $domain/amass.txt $domain/cert.txt 2>/dev/null | anew $domain/domains.txt
 
 # Enumerate DNS
 echo -e "${red}[+]Enumerating DNS..."
@@ -47,38 +46,11 @@ run_with_timeout dnsx -silent -a -resp-only -l ${domain}/domains.txt -o $domain/
 
 # Enumerate CIDR
 echo -e "${red}[+]Enumerating CIDR..."
-run_with_timeout mapcidr -l $domain/dnsx.txt -silent -aggregate -o $domain/mapcidr.txt
+run_with_timeout mapcidr -input-file $domain/dnsx.txt -aggregate -silent -output $domain/mapcidr.txt
 
 # Enumerate Naabu
 echo -e "${blue}[+]Enumerating NAABU..."
 run_with_timeout naabu -l $domain/mapcidr.txt -top-ports 100 -silent | httpx -silent -timeout 60 -threads 100 | anew $domain/naabuIP.txt
-
-
-
--e Command 'amass enum --passive -d plin.pe -o plin.pe/amass.txt' timed out after 120 seconds
--e [+]Enumerate CERT.SH...                                                                                                                                                                                                                 
-plin.pe                                                                                                                                                                                                                                    
-www.plin.pe                                                                                                                                                                                                                                
-domains saved at plin.pe/domains.txt...                                                                                                                                                                                                    
-plin.pe                                                                                                                                                                                                                                    
-b02-1421762403coinbase.plin.pe                                                                                                                                                                                                             
-netstats-coinbase.s3.plin.pe                                                                                                                                                                                                               
-vucoinbase.s3.plin.pe                                                                                                                                                                                                                      
-1421762403coinbase.plin.pe                                                                                                                                                                                                                 
-coinbase.s3.plin.pe                                                                                                                                                                                                                        
-www.plin.pe                                                                                                                                                                                                                                
-recibe.plin.pe                                                                                                                                                                                                                             
-cat: plin.pe/amass.txt: No such file or directory                                                                                                                                                                                          
--e [+]Enumerating DNS...                                                                                                                                                                                                                   
-34.73.11.241                                                                                                                                                                                                                               
-34.73.11.241                                                                                                                                                                                                                               
--e [+]Enumerating CIDR...                                                                                                                                                                                                                  
-flag provided but not defined: -l                                                                                                                                                                                                          
--e [+]Enumerating NAABU...                                                                                                                                                                                                                 
-[FTL] Could not run enumeration: open plin.pe/mapcidr.txt: no such file or directory                                                                                                                                                       
-Usage: httpx [OPTIONS] URL
-
-Error: No such option: -s
 
 
 
