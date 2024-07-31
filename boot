@@ -52,3 +52,35 @@ run_with_timeout mapcidr -l $domain/dnsx.txt -silent -aggregate -o $domain/mapci
 # Enumerate Naabu
 echo -e "${blue}[+]Enumerating NAABU..."
 run_with_timeout naabu -l $domain/mapcidr.txt -top-ports 100 -silent | httpx -silent -timeout 60 -threads 100 | anew $domain/naabuIP.txt
+
+
+
+-e Command 'amass enum --passive -d plin.pe -o plin.pe/amass.txt' timed out after 120 seconds
+-e [+]Enumerate CERT.SH...                                                                                                                                                                                                                 
+plin.pe                                                                                                                                                                                                                                    
+www.plin.pe                                                                                                                                                                                                                                
+domains saved at plin.pe/domains.txt...                                                                                                                                                                                                    
+plin.pe                                                                                                                                                                                                                                    
+b02-1421762403coinbase.plin.pe                                                                                                                                                                                                             
+netstats-coinbase.s3.plin.pe                                                                                                                                                                                                               
+vucoinbase.s3.plin.pe                                                                                                                                                                                                                      
+1421762403coinbase.plin.pe                                                                                                                                                                                                                 
+coinbase.s3.plin.pe                                                                                                                                                                                                                        
+www.plin.pe                                                                                                                                                                                                                                
+recibe.plin.pe                                                                                                                                                                                                                             
+cat: plin.pe/amass.txt: No such file or directory                                                                                                                                                                                          
+-e [+]Enumerating DNS...                                                                                                                                                                                                                   
+34.73.11.241                                                                                                                                                                                                                               
+34.73.11.241                                                                                                                                                                                                                               
+-e [+]Enumerating CIDR...                                                                                                                                                                                                                  
+flag provided but not defined: -l                                                                                                                                                                                                          
+-e [+]Enumerating NAABU...                                                                                                                                                                                                                 
+[FTL] Could not run enumeration: open plin.pe/mapcidr.txt: no such file or directory                                                                                                                                                       
+Usage: httpx [OPTIONS] URL
+
+Error: No such option: -s
+
+
+
+
+
