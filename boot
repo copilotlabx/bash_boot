@@ -1,3 +1,4 @@
+
 # Colors
 white="\e[97m"
 red="\e[31m"
@@ -28,9 +29,9 @@ fi
 
 # Enumerate all domains
 echo -e "${red}[+]Enumerate all domains..."
-run_with_timeout assetfinder --subs-only ${domain} > $domain/assetfinder.txt -silent
-run_with_timeout subfinder -d ${domain} -o $domain/subfinder.txt -silent
-run_with_timeout amass enum --passive -d $domain -o $domain/amass.txt -silent
+run_with_timeout assetfinder --subs-only ${domain} > $domain/assetfinder.txt
+run_with_timeout subfinder -d ${domain} -o $domain/subfinder.txt
+run_with_timeout amass enum --passive -d $domain -o $domain/amass.txt
 
 # Enumerate Cert.sh
 echo -e "${red}[+]Enumerate CERT.SH..."
@@ -42,7 +43,7 @@ cat $domain/assetfinder.txt $domain/subfinder.txt $domain/amass.txt $domain/cert
 
 # Enumerate DNS
 echo -e "${red}[+]Enumerating DNS..."
-run_with_timeout cat ${domain}/domains.txt | dnsx -silent -a -resp-only -o $domain/dnsx.txt
+run_with_timeout dnsx -silent -a -resp-only -l ${domain}/domains.txt -o $domain/dnsx.txt
 
 # Enumerate CIDR
 echo -e "${red}[+]Enumerating CIDR..."
@@ -50,4 +51,4 @@ run_with_timeout mapcidr -l $domain/dnsx.txt -silent -aggregate -o $domain/mapci
 
 # Enumerate Naabu
 echo -e "${blue}[+]Enumerating NAABU..."
-run_with_timeout naabu -l $domain/mapcidr.txt top-ports 100 -silent -sa | httpx -silent -timeout 60 -threads 100 | anew $domain/naabuIP.txt
+run_with_timeout naabu -l $domain/mapcidr.txt -top-ports 100 -silent | httpx -silent -timeout 60 -threads 100 | anew $domain/naabuIP.txt
