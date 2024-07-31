@@ -36,19 +36,6 @@ run_with_timeout amass enum --passive -d $domain -o $domain/amass.txt
 echo -e "${red}[+]Enumerate CERT.SH..."
 run_with_timeout curl -s "https://crt.sh/?q=%25.$domain&output=json" | jq -r '.[].name_value' | sed 's/\*\.//g' | anew $domain/cert.txt
 
-
-
-
--e [+]Enumerating CIDR...                                                                                                                                                                                                                   
-flag provided but not defined: -input-file                                                                                                                                                                                                  
--e [+]Enumerating NAABU...                                                                                                                                                                                                                  
-[FTL] Could not run enumeration: open bangbros.com/mapcidr.txt: no such file or directory                                                                                                                                                   
-Usage: httpx [OPTIONS] URL
-
-Error: No such option: -s
-
-
-
 # Combining results
 echo "domains saved at $domain/domains.txt..."
 cat $domain/assetfinder.txt $domain/subfinder.txt $domain/amass.txt $domain/cert.txt 2>/dev/null | anew $domain/domains.txt
@@ -59,12 +46,11 @@ run_with_timeout dnsx -silent -a -resp-only -l ${domain}/domains.txt -o $domain/
 
 # Enumerate CIDR
 echo -e "${red}[+]Enumerating CIDR..."
-run_with_timeout mapcidr -input-file $domain/dnsx.txt -aggregate -silent -output $domain/mapcidr.txt
+run_with_timeout mapcidr -l $domain/dnsx.txt -aggregate -silent -o $domain/mapcidr.txt
 
 # Enumerate Naabu
 echo -e "${blue}[+]Enumerating NAABU..."
 run_with_timeout naabu -l $domain/mapcidr.txt -top-ports 100 -silent | httpx -silent -timeout 60 -threads 100 | anew $domain/naabuIP.txt
-
 
 
 
